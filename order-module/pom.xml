@@ -7,10 +7,10 @@
 		<artifactId>cafe-system-parent-pom</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
-	<groupId>com.example</groupId>
-	<artifactId>order-system</artifactId>
+	<groupId>com.cafe</groupId>
+	<artifactId>cafe.order</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>order-system</name>
+	<name>order cafe</name>
 	<description>order system for cafe system </description>
 
 	<properties>

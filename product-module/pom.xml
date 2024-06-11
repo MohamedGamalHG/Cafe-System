@@ -7,10 +7,10 @@
 		<artifactId>cafe-system-parent-pom</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
-	<groupId>com.example</groupId>
-	<artifactId>cafe</artifactId>
+	<groupId>com.cafe.product</groupId>
+	<artifactId>cafe.product</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>cafe</name>
+	<name>product cafe</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
