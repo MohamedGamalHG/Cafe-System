@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ProductService implements ServiceProvider{
+public class ProductProduct implements ProductProvider {
 
     private WebClient webClient;
-    public ProductService(WebClient webClient)
+    public ProductProduct(WebClient webClient)
     {
         this.webClient = webClient;
     }
