@@ -11,8 +11,9 @@ import com.cafe.exceptionHandling.RecordNotFoundException;
 import com.cafe.repositories.OrderItemRepository;
 import com.cafe.repositories.OrderRepository;
 import com.cafe.enums.OrderStatus;
-import jakarta.transaction.Transactional;
+//import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,12 +25,12 @@ public class OrderService {
     private OrderRepository repository;
     private OrderItemRepository orderItemRepository;
     private final com.cafe.domainMap.OrderMapper OrderMapper;
-    private final ProductService productService;
+    private final ProductProviderImp productService;
 
     public OrderService(OrderRepository orderRepository ,
                         OrderMapper OrderMapper,
                         OrderItemRepository orderItemRepository,
-                        ProductService productService)
+                        ProductProviderImp productService)
     {
         this.repository = orderRepository;
         this.OrderMapper = OrderMapper;
@@ -66,7 +67,7 @@ public class OrderService {
         for (OrderItem order1:OrderData.getOrderItemList()) {
             ids.add(order1.getProductId());
         }
-        List<ProductOrderRetrieveResponse> productRetrieveData = productService.FetchDataFromProduct("/product/retrieveByIds",ids);
+        List<ProductOrderRetrieveResponse> productRetrieveData = productService.fetchProductDataByIds(ids);
 
         OrderData.setOrderDate(LocalDateTime.now());
         OrderData.setOrderStatus(Integer.parseInt(OrderStatus.Placed.toString()));
