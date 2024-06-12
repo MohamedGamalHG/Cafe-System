@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ProductProduct implements ProductProvider {
+public class ProductProviderImp implements ProductProvider {
 
     private WebClient webClient;
-    public ProductProduct(WebClient webClient)
+    public ProductProviderImp(WebClient webClient)
     {
         this.webClient = webClient;
     }
@@ -55,8 +55,20 @@ public class ProductProduct implements ProductProvider {
     }
 
         @Override
-    public Optional<?> fetchData(int[] ids) {
+    public List<ProductOrderRetrieveResponse> fetchProductDataByIds(List<Long> ids) {
+            String queryParams = appendIdsForQueryParam(ids);
+            return webClient.get()
+                    .uri(uriBuilder -> uriBuilder.path("/product/retrieveByIds").queryParam("ids",queryParams).build() )
+                    .retrieve()
+                    .bodyToMono(new ParameterizedTypeReference<List<ProductOrderRetrieveResponse>>() {}).block();
+    }
 
-        return Optional.empty();
+    private String appendIdsForQueryParam(List<Long> ids)
+    {
+        StringBuilder sb = new StringBuilder();
+        for (Long id : ids) {
+            sb.append(id).append(",");
+        }
+        return sb.substring(0, sb.length() - 1); // Remove trailing "&"
     }
 }
