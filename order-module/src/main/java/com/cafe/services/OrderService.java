@@ -63,11 +63,7 @@ public class OrderService {
     public Order create(Order Order)
     {
         double totalPrice = 0.0;
-        List<Long> ids = new ArrayList<>();
 
-        for (OrderItem orderItem:Order.getOrderItemList()) {
-            ids.add(orderItem.getProductId());
-        }
         List<ProductOrderRetrieveResponse> productRetrieveData = productService.fetchProductDataByIds(ids);
 
         Order.setOrderDate(LocalDateTime.now());
@@ -81,8 +77,20 @@ public class OrderService {
         JpaOrder order = OrderMapper.convert(Order);
         repository.save(order);
 
+        List<JpaOrderItem> jpaOrderItems = createOrderList(Order,order);
+        orderItemRepository.saveAll(jpaOrderItems);
+
 
         return Order;
+    }
+    private List<Long> getProductIds(Order Order)
+    {
+        List<Long> ids = new ArrayList<>();
+
+        for (OrderItem orderItem:Order.getOrderItemList()) {
+            ids.add(orderItem.getProductId());
+        }
+        return ids;
     }
     private List<JpaOrderItem> createOrderList(Order Order,JpaOrder order)
     {
@@ -98,7 +106,7 @@ public class OrderService {
 
             jpaOrderItems.add(jpaOrderItem);
         }
-        return orderItemRepository.saveAll(jpaOrderItems);
+        return jpaOrderItems;
     }
     public Order update(Order Order)
     {
