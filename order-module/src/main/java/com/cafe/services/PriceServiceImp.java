@@ -20,7 +20,8 @@ public class PriceServiceImp implements PriceService{
     {
         return Order.getOrderItemList().stream().mapToDouble(orderitem -> orderitem.getQuantity() * getProductPriceById(orderitem.getProductId(),Order)).sum();
     }
-    private double getProductPriceById(long id,Order Order)
+    @Override
+    public double getProductPriceById(long id,Order Order)
     {
         Map<Long,Double> priceMap = mapIdToPrice(Order);
         return priceMap.get(id);

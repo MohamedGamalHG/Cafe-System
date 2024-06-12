@@ -139,7 +139,7 @@ public class OrderService {
             jpaOrderItem.setQuantity(orderItem.getQuantity());
             jpaOrderItem.setNotes(orderItem.getNotes());
             jpaOrderItem.setProductId(orderItem.getProductId());
-
+            jpaOrderItem.setProductPrice(priceService.getProductPriceById(orderItem.getProductId(),Order));
             jpaOrderItems.add(jpaOrderItem);
         }
         return jpaOrderItems;

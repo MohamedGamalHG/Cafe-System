@@ -16,4 +16,6 @@ public class JpaOrderItem extends BaseEntity{
     private JpaOrder orderId;
     @Column(name = "product_id")
     private long productId;
+    @Column(name = "product_price")
+    private double productPrice;
 }
