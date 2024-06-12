@@ -60,42 +60,46 @@ public class OrderService {
         throw new RecordNotFoundException("This Record Is Not Found Of Id = "+ id);
     }
 
-    public Order create(Order OrderData)
+    public Order create(Order Order)
     {
         double totalPrice = 0.0;
-        List<Long>ids= new ArrayList<>();
-        for (OrderItem order1:OrderData.getOrderItemList()) {
-            ids.add(order1.getProductId());
+        List<Long> ids = new ArrayList<>();
+
+        for (OrderItem orderItem:Order.getOrderItemList()) {
+            ids.add(orderItem.getProductId());
         }
         List<ProductOrderRetrieveResponse> productRetrieveData = productService.fetchProductDataByIds(ids);
 
-        OrderData.setOrderDate(LocalDateTime.now());
-        OrderData.setOrderStatus(Integer.parseInt(OrderStatus.Placed.toString()));
+        Order.setOrderDate(LocalDateTime.now());
+        Order.setOrderStatus(Integer.parseInt(OrderStatus.Placed.toString()));
         int i=0;
         for(ProductOrderRetrieveResponse p : productRetrieveData)
-            totalPrice = totalPrice + (p.getPrice() *OrderData.getOrderItemList().get(i++).getQuantity()) ;
+            totalPrice = totalPrice + (p.getPrice() *Order.getOrderItemList().get(i++).getQuantity()) ;
 
-        OrderData.setTotalAmount(totalPrice);
+        Order.setTotalAmount(totalPrice);
 
-        JpaOrder order = OrderMapper.convert(OrderData);
+        JpaOrder order = OrderMapper.convert(Order);
         repository.save(order);
+
+
+        return Order;
+    }
+    private List<JpaOrderItem> createOrderList(Order Order,JpaOrder order)
+    {
         List<JpaOrderItem> jpaOrderItems = new ArrayList<>();
 
-        for (OrderItem order1:OrderData.getOrderItemList()) {
+        for (OrderItem orderItem:Order.getOrderItemList()) {
             JpaOrderItem jpaOrderItem =  new JpaOrderItem();
 
             jpaOrderItem.setOrderId(order);
-            jpaOrderItem.setQuantity(order1.getQuantity());
-            jpaOrderItem.setNotes(order1.getNotes());
-            jpaOrderItem.setProductId(order1.getProductId());
+            jpaOrderItem.setQuantity(orderItem.getQuantity());
+            jpaOrderItem.setNotes(orderItem.getNotes());
+            jpaOrderItem.setProductId(orderItem.getProductId());
 
             jpaOrderItems.add(jpaOrderItem);
         }
-        orderItemRepository.saveAll(jpaOrderItems);
-
-        return OrderData;
+        return orderItemRepository.saveAll(jpaOrderItems);
     }
-
     public Order update(Order Order)
     {
         try {
