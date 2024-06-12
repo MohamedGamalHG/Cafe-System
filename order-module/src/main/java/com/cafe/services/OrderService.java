@@ -11,14 +11,12 @@ import com.cafe.exceptionHandling.RecordNotFoundException;
 import com.cafe.repositories.OrderItemRepository;
 import com.cafe.repositories.OrderRepository;
 import com.cafe.enums.OrderStatus;
-//import jakarta.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+//import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class OrderService {
@@ -26,16 +24,19 @@ public class OrderService {
     private OrderItemRepository orderItemRepository;
     private final com.cafe.domainMap.OrderMapper OrderMapper;
     private final ProductProviderImp productService;
+    private final PriceService priceService;
 
     public OrderService(OrderRepository orderRepository ,
                         OrderMapper OrderMapper,
                         OrderItemRepository orderItemRepository,
-                        ProductProviderImp productService)
+                        ProductProviderImp productService,
+                        PriceService priceService)
     {
         this.repository = orderRepository;
         this.OrderMapper = OrderMapper;
         this.orderItemRepository = orderItemRepository;
         this.productService = productService;
+        this.priceService = priceService;
     }
     public List<Order> findAll()
     {
@@ -60,57 +61,24 @@ public class OrderService {
         throw new RecordNotFoundException("This Record Is Not Found Of Id = "+ id);
     }
 
+    @Transactional
     public Order create(Order Order)
     {
-        double totalPrice = 0.0;
-
-        List<Long> ids = getProductIds(Order);
-
-        List<ProductResponse> productRetrieveData = productService.fetchProductDataByIds(ids);
-
-
+        /*
         int i=0;
-        for(ProductResponse p : productRetrieveData)
+        for(ProductResponse p : productResponseList)
             totalPrice = totalPrice + (p.getPrice() *Order.getOrderItemList().get(i++).getQuantity()) ;
+*/
 
-        Order.setOrderDate(LocalDateTime.now());
-        Order.setOrderStatus(Integer.parseInt(OrderStatus.Placed.toString()));
-        Order.setTotalAmount(totalPrice);
-
-        JpaOrder order = OrderMapper.convert(Order);
+        JpaOrder order = createOrder(Order);
         repository.save(order);
 
-        List<JpaOrderItem> jpaOrderItems = createOrderList(Order,order);
+        List<JpaOrderItem> jpaOrderItems = createOrderItemList(Order,order);
         orderItemRepository.saveAll(jpaOrderItems);
-
 
         return Order;
     }
-    private List<Long> getProductIds(Order Order)
-    {
-        List<Long> ids = new ArrayList<>();
 
-        for (OrderItem orderItem:Order.getOrderItemList()) {
-            ids.add(orderItem.getProductId());
-        }
-        return ids;
-    }
-    private List<JpaOrderItem> createOrderList(Order Order,JpaOrder order)
-    {
-        List<JpaOrderItem> jpaOrderItems = new ArrayList<>();
-
-        for (OrderItem orderItem:Order.getOrderItemList()) {
-            JpaOrderItem jpaOrderItem =  new JpaOrderItem();
-
-            jpaOrderItem.setOrderId(order);
-            jpaOrderItem.setQuantity(orderItem.getQuantity());
-            jpaOrderItem.setNotes(orderItem.getNotes());
-            jpaOrderItem.setProductId(orderItem.getProductId());
-
-            jpaOrderItems.add(jpaOrderItem);
-        }
-        return jpaOrderItems;
-    }
     public Order update(Order Order)
     {
         try {
@@ -148,6 +116,33 @@ public class OrderService {
         else
             throw new RecordNotFoundException("This Record Is Not Found Of Id = "+id);
 
+    }
+
+    private JpaOrder createOrder(Order Order)
+    {
+        Order.setOrderDate(LocalDateTime.now());
+        Order.setOrderStatus(Integer.parseInt(OrderStatus.Placed.toString()));
+        Order.setTotalAmount(priceService.getTotalPrice(Order));
+
+        return OrderMapper.convert(Order);
+    }
+
+
+    private List<JpaOrderItem> createOrderItemList(Order Order,JpaOrder order)
+    {
+        List<JpaOrderItem> jpaOrderItems = new ArrayList<>();
+
+        for (OrderItem orderItem:Order.getOrderItemList()) {
+            JpaOrderItem jpaOrderItem =  new JpaOrderItem();
+
+            jpaOrderItem.setOrderId(order);
+            jpaOrderItem.setQuantity(orderItem.getQuantity());
+            jpaOrderItem.setNotes(orderItem.getNotes());
+            jpaOrderItem.setProductId(orderItem.getProductId());
+
+            jpaOrderItems.add(jpaOrderItem);
+        }
+        return jpaOrderItems;
     }
 
 }
