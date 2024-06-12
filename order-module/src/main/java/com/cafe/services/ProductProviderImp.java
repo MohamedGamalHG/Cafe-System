@@ -1,6 +1,6 @@
 package com.cafe.services;
 
-import com.cafe.domain.dtos.ProductOrderRetrieveResponse;
+import com.cafe.domain.dtos.ProductResponse;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -40,7 +40,7 @@ public class ProductProviderImp implements ProductProvider {
 //
 //    }
 
-    public List<ProductOrderRetrieveResponse> FetchDataFromProduct(String path, List<Long> ids) {
+    public List<ProductResponse> FetchDataFromProduct(String path, List<Long> ids) {
         StringBuilder sb = new StringBuilder();
         //sb.append("ids=");
         for (Long id : ids) {
@@ -50,17 +50,17 @@ public class ProductProviderImp implements ProductProvider {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder.path(path).queryParam("ids",queryParams).build() )
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<ProductOrderRetrieveResponse>>() {}).block();
+                .bodyToMono(new ParameterizedTypeReference<List<ProductResponse>>() {}).block();
 
     }
 
         @Override
-    public List<ProductOrderRetrieveResponse> fetchProductDataByIds(List<Long> ids) {
+    public List<ProductResponse> fetchProductDataByIds(List<Long> ids) {
             String queryParams = appendIdsForQueryParam(ids);
             return webClient.get()
                     .uri(uriBuilder -> uriBuilder.path("/product/retrieveByIds").queryParam("ids",queryParams).build() )
                     .retrieve()
-                    .bodyToMono(new ParameterizedTypeReference<List<ProductOrderRetrieveResponse>>() {}).block();
+                    .bodyToMono(new ParameterizedTypeReference<List<ProductResponse>>() {}).block();
     }
 
     private String appendIdsForQueryParam(List<Long> ids)

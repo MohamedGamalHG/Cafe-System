@@ -2,7 +2,7 @@ package com.cafe.services;
 
 import com.cafe.domain.dtos.Order;
 import com.cafe.domain.dtos.OrderItem;
-import com.cafe.domain.dtos.ProductOrderRetrieveResponse;
+import com.cafe.domain.dtos.ProductResponse;
 import com.cafe.domain.entities.JpaOrder;
 import com.cafe.domain.entities.JpaOrderItem;
 import com.cafe.domainMap.OrderMapper;
@@ -64,14 +64,17 @@ public class OrderService {
     {
         double totalPrice = 0.0;
 
-        List<ProductOrderRetrieveResponse> productRetrieveData = productService.fetchProductDataByIds(ids);
+        List<Long> ids = getProductIds(Order);
+
+        List<ProductResponse> productRetrieveData = productService.fetchProductDataByIds(ids);
+
+
+        int i=0;
+        for(ProductResponse p : productRetrieveData)
+            totalPrice = totalPrice + (p.getPrice() *Order.getOrderItemList().get(i++).getQuantity()) ;
 
         Order.setOrderDate(LocalDateTime.now());
         Order.setOrderStatus(Integer.parseInt(OrderStatus.Placed.toString()));
-        int i=0;
-        for(ProductOrderRetrieveResponse p : productRetrieveData)
-            totalPrice = totalPrice + (p.getPrice() *Order.getOrderItemList().get(i++).getQuantity()) ;
-
         Order.setTotalAmount(totalPrice);
 
         JpaOrder order = OrderMapper.convert(Order);
