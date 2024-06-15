@@ -11,4 +11,5 @@ public class OrderItem {
     private long     productId;
     private int     quantity;
     private String  notes;
+
 }

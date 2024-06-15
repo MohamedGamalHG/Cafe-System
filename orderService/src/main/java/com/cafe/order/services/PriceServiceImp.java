@@ -1,36 +1,38 @@
 package com.cafe.order.services;
 
-import com.cafe.order.domain.dtos.Order;
-import com.cafe.order.domain.dtos.OrderItem;
-import com.cafe.order.domain.dtos.Product;
+import com.cafe.order.domain.dtos.*;
+import lombok.AllArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@AllArgsConstructor
 public class PriceServiceImp implements PriceService{
-    private final ProductProvider provider;
+    private final ProductProvider productProvider;
+    private Map<Long,Double> priceMap;
+    @Override
+    public double getTotalPrice(OrderRequest orderRequest)
+    {
+         priceMap = mapIdToPrice(orderRequest);
 
-    public PriceServiceImp(ProductProvider productProvider){
-        this.provider = productProvider;
+        return orderRequest
+                .getOrderRequestLists()
+                .stream()
+                .mapToDouble(orderItem -> orderItem.getQuantity() * priceMap.get(orderItem.getProductId())).sum();
+//                .mapToDouble(orderItem -> orderItem.getQuantity() * getProductPriceById(orderItem.getProductId())).sum();
     }
     @Override
-    public double getTotalPrice(Order Order)
+    public double getProductPriceById(long id)
     {
-        return Order.getOrderItemList().stream().mapToDouble(orderitem -> orderitem.getQuantity() * getProductPriceById(orderitem.getProductId(),Order)).sum();
-    }
-    @Override
-    public double getProductPriceById(long id,Order Order)
-    {
-        Map<Long,Double> priceMap = mapIdToPrice(Order);
         return priceMap.get(id);
     }
-    private Map<Long,Double> mapIdToPrice(Order Order)
+    private Map<Long,Double> mapIdToPrice(OrderRequest orderRequest)
     {
-        List<Long> ids = getProductIds(Order);
+        List<Long> ids = getProductIds(orderRequest);
 
-        List<Product> productResponseList = provider.fetchProductDataByIds(ids);
+        List<Product> productResponseList = productProvider.fetchProductDataByIds(ids);
 
         Map<Long,Double> priceMap = new HashMap<>();
         for (Product productResponse:productResponseList)
@@ -41,11 +43,11 @@ public class PriceServiceImp implements PriceService{
 
         return priceMap;
     }
-    private List<Long> getProductIds(Order Order)
+    private List<Long> getProductIds(OrderRequest orderRequest)
     {
         List<Long> ids = new ArrayList<>();
 
-        for (OrderItem orderItem:Order.getOrderItemList()) {
+        for (OrderRequestList orderItem:orderRequest.getOrderRequestLists()) {
             ids.add(orderItem.getProductId());
         }
         return ids;

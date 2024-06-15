@@ -3,10 +3,11 @@ package com.cafe.order.domain.dtos;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 public class OrderRequest {
-    private long     productId;
-    private int     quantity;
-    private String  notes;
+   List<OrderRequestList> orderRequestLists = new ArrayList<>();
 }

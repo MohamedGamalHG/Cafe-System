@@ -1,7 +1,9 @@
 package com.cafe.order.controllers;
 
+import com.cafe.order.domain.dtos.OrderRequest;
 import com.cafe.order.services.OrderService;
 import com.cafe.order.domain.dtos.Order;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -9,42 +11,39 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/api/orders")
+@AllArgsConstructor
 public class OrderController {
-    private final OrderService service;
-
-    public OrderController(OrderService orderService){
-        this.service = orderService;
-    }
+    private final OrderService orderService;
 
     @GetMapping
     public ResponseEntity<?> findAll()
     {
-        return ResponseEntity.ok(service.findAll());
+        return ResponseEntity.ok(orderService.findAll());
     }
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id)
     {
-        return ResponseEntity.ok(service.findById(id));
+        return ResponseEntity.ok(orderService.findById(id));
     }
 
 //    @PostMapping(value = "/",produces = {"text/event-stream"})
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody Order orderinsert)
+    public ResponseEntity<?> create(@RequestBody OrderRequest orderRequest)
     {
-        Order book = service.create(orderinsert);
+        OrderRequest book = orderService.create(orderRequest);
         return ResponseEntity.ok(book);
     }
     @PutMapping
     public ResponseEntity<?> update(@RequestBody Order orderupdate)
     {
-        Order book = service.update(orderupdate);
+        Order book = orderService.update(orderupdate);
         return ResponseEntity.ok(book);
     }
 
     @DeleteMapping("/{id}")
     public  boolean delete(@PathVariable Long id)
     {
-        service.delete(id);
+        orderService.delete(id);
         return true;
     }
 
