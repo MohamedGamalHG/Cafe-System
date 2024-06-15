@@ -1,9 +1,9 @@
 package com.cafe.order.services;
 
-import com.cafe.order.domain.dtos.ProductResponse;
+import com.cafe.order.domain.dtos.Product;
 
 import java.util.List;
 
 public interface ProductProvider {
-    List<ProductResponse> fetchProductDataByIds(List<Long> ids);
+    List<Product> fetchProductDataByIds(List<Long> ids);
 }

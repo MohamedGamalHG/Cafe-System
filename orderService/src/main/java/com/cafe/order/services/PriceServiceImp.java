@@ -2,7 +2,7 @@ package com.cafe.order.services;
 
 import com.cafe.order.domain.dtos.Order;
 import com.cafe.order.domain.dtos.OrderItem;
-import com.cafe.order.domain.dtos.ProductResponse;
+import com.cafe.order.domain.dtos.Product;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,10 +30,10 @@ public class PriceServiceImp implements PriceService{
     {
         List<Long> ids = getProductIds(Order);
 
-        List<ProductResponse> productResponseList = provider.fetchProductDataByIds(ids);
+        List<Product> productResponseList = provider.fetchProductDataByIds(ids);
 
         Map<Long,Double> priceMap = new HashMap<>();
-        for (ProductResponse productResponse:productResponseList)
+        for (Product productResponse:productResponseList)
         {
             if(!priceMap.containsKey(productResponse.getId()))
                 priceMap.put(productResponse.getId(),productResponse.getPrice());

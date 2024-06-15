@@ -1,6 +1,6 @@
 package com.cafe.order.services;
 
-import com.cafe.order.domain.dtos.ProductResponse;
+import com.cafe.order.domain.dtos.Product;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -19,7 +19,7 @@ public class ProductProviderImp implements ProductProvider {
     }
 
     @Override
-    public List<ProductResponse> fetchProductDataByIds(List<Long> ids) {
+    public List<Product> fetchProductDataByIds(List<Long> ids) {
         /* we make variable hasData to carry data and when call again it give from this data*/
 //        if(!hasData.isEmpty())
 //            return hasData;
@@ -28,7 +28,7 @@ public class ProductProviderImp implements ProductProvider {
             return webClient.get()
                     .uri(uriBuilder -> uriBuilder.path("/product/retrieveByIds").queryParam("ids", queryParams).build())
                     .retrieve()
-                    .bodyToMono(new ParameterizedTypeReference<List<ProductResponse>>() {
+                    .bodyToMono(new ParameterizedTypeReference<List<Product>>() {
                     }).block();
 //        }
     }
