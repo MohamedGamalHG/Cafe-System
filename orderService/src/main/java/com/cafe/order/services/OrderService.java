@@ -1,5 +1,8 @@
 package com.cafe.order.services;
 
+import com.cafe.order.domain.dtos.OrderRequest;
+import com.cafe.order.domain.dtos.OrderRequestList;
+import com.cafe.order.domainMap.OrderItemMapper;
 import com.cafe.order.domainMap.OrderMapper;
 import com.cafe.order.exceptionHandling.GeneralException;
 import com.cafe.order.exceptionHandling.RecordNotFoundException;
@@ -11,6 +14,7 @@ import com.cafe.order.domain.entities.JpaOrderItem;
 import com.cafe.order.repositories.OrderItemRepository;
 import com.cafe.order.enums.OrderStatus;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 //import org.springframework.transaction.annotation.Transactional;
 
@@ -18,25 +22,14 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
+@AllArgsConstructor
 public class OrderService {
     private OrderRepository repository;
     private OrderItemRepository orderItemRepository;
     private final com.cafe.order.domainMap.OrderMapper OrderMapper;
-    private final ProductProviderImp productService;
+    private final OrderItemMapper orderItemMapper;
     private final PriceService priceService;
 
-    public OrderService(OrderRepository orderRepository ,
-                        OrderMapper OrderMapper,
-                        OrderItemRepository orderItemRepository,
-                        ProductProviderImp productService,
-                        PriceService priceService)
-    {
-        this.repository = orderRepository;
-        this.OrderMapper = OrderMapper;
-        this.orderItemRepository = orderItemRepository;
-        this.productService = productService;
-        this.priceService = priceService;
-    }
     public List<Order> findAll()
     {
         // without use stream
@@ -61,7 +54,7 @@ public class OrderService {
     }
 
     @Transactional
-    public Order create(Order Order)
+    public OrderRequest create(OrderRequest orderRequest)
     {
         /*
         int i=0;
@@ -69,13 +62,13 @@ public class OrderService {
             totalPrice = totalPrice + (p.getPrice() *Order.getOrderItemList().get(i++).getQuantity()) ;
 */
 
-        JpaOrder order = createOrder(Order);
+        JpaOrder order = createOrder(orderRequest);
         repository.save(order);
 
-        List<JpaOrderItem> jpaOrderItems = createOrderItemList(Order,order);
+        List<JpaOrderItem> jpaOrderItems = createOrderItemList(orderRequest,order);
         orderItemRepository.saveAll(jpaOrderItems);
 
-        return Order;
+        return orderRequest;
     }
 
     public Order update(Order Order)
@@ -117,28 +110,31 @@ public class OrderService {
 
     }
 
-    private JpaOrder createOrder(Order Order)
+    private JpaOrder createOrder(OrderRequest orderRequest)
     {
+        Order Order = new Order();
         Order.setOrderDate(LocalDateTime.now());
         Order.setOrderStatus(Integer.parseInt(OrderStatus.Placed.toString()));
-        Order.setTotalAmount(priceService.getTotalPrice(Order));
+        Order.setTotalAmount(priceService.getTotalPrice(orderRequest));
 
         return OrderMapper.convert(Order);
     }
 
 
-    private List<JpaOrderItem> createOrderItemList(Order Order,JpaOrder order)
+    private List<JpaOrderItem> createOrderItemList(OrderRequest orderRequest,JpaOrder order)
     {
         List<JpaOrderItem> jpaOrderItems = new ArrayList<>();
 
-        for (OrderItem orderItem:Order.getOrderItemList()) {
-            JpaOrderItem jpaOrderItem =  new JpaOrderItem();
+        for (OrderRequestList orderItem:orderRequest.getOrderRequestLists()) {
+//            JpaOrderItem jpaOrderItem =  new JpaOrderItem();
 
-            jpaOrderItem.setOrderId(order);
-            jpaOrderItem.setQuantity(orderItem.getQuantity());
-            jpaOrderItem.setNotes(orderItem.getNotes());
-            jpaOrderItem.setProductId(orderItem.getProductId());
-            jpaOrderItem.setProductPrice(priceService.getProductPriceById(orderItem.getProductId(),Order));
+//            jpaOrderItem.setOrderId(order);
+//            jpaOrderItem.setQuantity(orderItem.getQuantity());
+//            jpaOrderItem.setNotes(orderItem.getNotes());
+//            jpaOrderItem.setProductId(orderItem.getProductId());
+            orderItem.setOrderId(order);
+            orderItem.setProductPrice(priceService.getProductPriceById(orderItem.getProductId()));
+            JpaOrderItem jpaOrderItem = orderItemMapper.convert(orderItem);
             jpaOrderItems.add(jpaOrderItem);
         }
         return jpaOrderItems;
