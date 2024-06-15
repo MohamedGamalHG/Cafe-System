@@ -8,7 +8,7 @@
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 	<groupId>com.cafe</groupId>
-	<artifactId>order</artifactId>
+	<artifactId>cafe-order</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>order cafe</name>
 	<description>order system for cafe system </description>
