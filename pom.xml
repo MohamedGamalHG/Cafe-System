@@ -16,9 +16,9 @@
 
   <name>cafe-system-parent-pom</name>
   <modules>
-    <module>product-module</module>
-    <module>inventory-module</module>
-    <module>order-module</module>
+    <module>productService</module>
+    <module>inventoryService</module>
+    <module>orderService</module>
   </modules>
 
 
