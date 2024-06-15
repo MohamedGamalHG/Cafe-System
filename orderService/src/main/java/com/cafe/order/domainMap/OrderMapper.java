@@ -12,17 +12,6 @@ public class OrderMapper {
 
     public OrderMapper(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
-        TypeMap<Order, JpaOrder> type = this.modelMapper.createTypeMap(Order.class, JpaOrder.class);
-//        modelMapper.addMappings(new PropertyMap<Order, JpaOrder>() {
-//            @Override
-//            protected void configure() {
-//                map(source.setOrder_date();, (destination, value) -> value != null ? LocalDateTime.of(value) : null).setNullRepresentation(null); // Handle null values
-//            }
-//        });
-//        type.addMappings(mapper -> {
-//            mapper.map(src -> src.getOrder_status(), (jpaOrder, o) -> jpaOrder.setOrder_status(Or));
-//            //mapper.map(src -> src.getId(), CategoryJpa::setId);
-//        });
     }
     public Order convert(JpaOrder jpaOrder)
     {

@@ -56,11 +56,6 @@ public class OrderService {
     @Transactional
     public OrderRequest create(OrderRequest orderRequest)
     {
-        /*
-        int i=0;
-        for(ProductResponse p : productResponseList)
-            totalPrice = totalPrice + (p.getPrice() *Order.getOrderItemList().get(i++).getQuantity()) ;
-*/
 
         JpaOrder order = createOrder(orderRequest);
         repository.save(order);
@@ -126,12 +121,6 @@ public class OrderService {
         List<JpaOrderItem> jpaOrderItems = new ArrayList<>();
 
         for (OrderRequestList orderItem:orderRequest.getOrderRequestLists()) {
-//            JpaOrderItem jpaOrderItem =  new JpaOrderItem();
-
-//            jpaOrderItem.setOrderId(order);
-//            jpaOrderItem.setQuantity(orderItem.getQuantity());
-//            jpaOrderItem.setNotes(orderItem.getNotes());
-//            jpaOrderItem.setProductId(orderItem.getProductId());
             orderItem.setOrderId(order);
             orderItem.setProductPrice(priceService.getProductPriceById(orderItem.getProductId()));
             JpaOrderItem jpaOrderItem = orderItemMapper.convert(orderItem);
