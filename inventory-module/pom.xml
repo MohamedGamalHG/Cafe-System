@@ -11,7 +11,7 @@
 
 	<parent>
 		<groupId>org.cafe</groupId>
-		<artifactId>cafe-system-parent-pom</artifactId>
+		<artifactId>cafe-system-parent</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
