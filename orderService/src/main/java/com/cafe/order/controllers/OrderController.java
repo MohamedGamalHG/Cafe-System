@@ -33,12 +33,6 @@ public class OrderController {
         OrderRequest book = orderService.create(orderRequest);
         return ResponseEntity.ok(book);
     }
-    @PutMapping
-    public ResponseEntity<?> update(@RequestBody Order orderupdate)
-    {
-        Order book = orderService.update(orderupdate);
-        return ResponseEntity.ok(book);
-    }
 
     @DeleteMapping("/{id}")
     public  boolean delete(@PathVariable Long id)

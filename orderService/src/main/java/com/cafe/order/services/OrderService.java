@@ -66,24 +66,6 @@ public class OrderService {
         return orderRequest;
     }
 
-    public Order update(Order Order)
-    {
-        try {
-            Optional<JpaOrder> jpaOrder = repository.findById(Order.getId());
-
-            if (jpaOrder.isPresent()) {
-                JpaOrder jpaOrder1 = OrderMapper.convert(Order);
-                repository.save(jpaOrder1);
-                return Order;
-            }
-            else
-                throw new RecordNotFoundException("This Record Is Not Found Of Id = "+Order.getId());
-        }catch (Exception ex)
-        {
-            //logger.error(ex.getMessage());
-            throw new GeneralException(ex.getMessage());
-        }
-    }
     @Transactional
     public void delete(Long id)
     {
