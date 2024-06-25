@@ -69,22 +69,32 @@ public class OrderService {
     @Transactional
     public void delete(Long id)
     {
-        Optional<JpaOrder> jpaOrder = repository.findById(id);
-        if(jpaOrder.isPresent()) {
+        try{
+            boolean isDeleted = deleteOrderAndOrderItems(id);
+            if(!isDeleted)
+                throw new GeneralException("Something went wrong when delete order = " + id);
+        }
+        catch (RecordNotFoundException ex) {
+            throw new RecordNotFoundException("This Record Is Not Found Of Id = " + id);
+        }
+
+    }
+    private boolean deleteOrderAndOrderItems(Long orderId) {
+
+        Optional<JpaOrder> jpaOrder = repository.findById(orderId);
+        if (jpaOrder.isPresent()) {
 
             Optional<List<JpaOrderItem>> orderItemList = orderItemRepository.findByOrderId(jpaOrder.get());
-            if(orderItemList.isPresent()) {
-                List<Long>ids = new ArrayList<>();
+            if (orderItemList.isPresent()) {
+                List<Long> ids = new ArrayList<>();
                 for (JpaOrderItem jpaOrderItem : orderItemList.get())
                     ids.add(jpaOrderItem.getId());
                 orderItemRepository.deleteAllByIdInBatch(ids);
             }
-            repository.deleteById(id);
-
+            repository.deleteById(orderId);
+            return true;
         }
-        else
-            throw new RecordNotFoundException("This Record Is Not Found Of Id = "+id);
-
+        return false;
     }
 
     private JpaOrder createOrder(OrderRequest orderRequest)
