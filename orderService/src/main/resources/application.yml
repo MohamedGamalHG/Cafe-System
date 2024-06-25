@@ -1,0 +1,28 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: order system
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/order-system
+    username: root
+    password:
+    driver-class-name: com.mysql.jdbc.Driver
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+        ddl-auto: none
+        naming.physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: true
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog-master.yml
+logging:
+  level:
+    org.hibernate: info
+    org.hibernate.Sql: debug
