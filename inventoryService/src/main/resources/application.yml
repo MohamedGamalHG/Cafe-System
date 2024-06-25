@@ -21,6 +21,13 @@ spring:
   liquibase:
     enabled: true
     change-log: classpath:db/changelog-master.yml
+  kafka:
+    bootstrap-server: localhost:9092
+    consumer:
+      group-id: inventory-group1
+
+
+
 logging:
   level:
     org.hibernate: info
