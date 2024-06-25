@@ -1,9 +1,11 @@
+server:
+  port: 8082
+
 spring:
   application:
-    name: product system
-
+    name: inventory system
   datasource:
-    url: jdbc:mysql://localhost:3306/cafe
+    url: jdbc:mysql://localhost:3306/inventory
     username: root
     password:
     driver-class-name: com.mysql.jdbc.Driver
