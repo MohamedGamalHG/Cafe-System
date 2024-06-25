@@ -47,9 +47,8 @@ public class OrderService {
     {
         Optional<JpaOrder> jpaOrder = repository.findById(id);
         if (jpaOrder.isPresent())
-        {
             return OrderMapper.convert(jpaOrder.get());
-        }
+
         throw new RecordNotFoundException("This Record Is Not Found Of Id = "+ id);
     }
 
