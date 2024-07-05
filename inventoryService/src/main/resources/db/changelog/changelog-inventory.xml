@@ -10,10 +10,10 @@
             <column name="Id" type="bigint" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="Inventory_PK"/>
             </column>
-            <column name="ProductName" type="varchar(50)">
+            <column name="product_name" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="Quantity" type="integer">
+            <column name="quantity" type="integer">
                 <constraints nullable="false"/>
             </column>
             <column name="created_at" type="datetime">

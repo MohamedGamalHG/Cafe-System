@@ -3,3 +3,5 @@ databaseChangeLog:
       file: db/changelog/changelog-category.xml
   - include:
       file: db/changelog/changelog-product.xml
+  - include:
+      file: db/changelog/changelog-product-update-imagepath-name.xml

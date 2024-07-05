@@ -6,12 +6,14 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
-@AllArgsConstructor
+//@AllArgsConstructor
 public class OrderProducerImp implements OrderProducer{
-    private KafkaTemplate<String, String> kafkaTemplate;
-
     @Value("${spring.kafka.topic-name-1}")
     private String topicName;
+    private KafkaTemplate<String, String> kafkaTemplate;
+    public OrderProducerImp(KafkaTemplate<String, String> kafkaTemplate){
+        this.kafkaTemplate = kafkaTemplate;
+    }
 
     public void sendOrderMessage(String message) {
         kafkaTemplate.send(this.topicName,message);

@@ -1,9 +1,6 @@
 package com.cafe.product.domain.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +14,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ProductJpa extends BaseEntity {
     private double Price;
-    private String ImagePath;
+    @Column(name = "image_path")
+    private String imagePath;
     private String Description;
     @ManyToOne()
     @JoinColumn(name = "category_id")

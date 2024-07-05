@@ -1,5 +1,6 @@
 package com.cafe.inventory.domain.entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class InventoryJpa extends BaseEntity{
-    private String ProductName;
-    private Long Quantity;
+    @Column(name = "product_name")
+    private String productName;
+    private Long quantity;
 }

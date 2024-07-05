@@ -8,6 +8,6 @@ import lombok.Setter;
 @Setter
 public class Inventory {
     private Long Id;
-    private String ProductName;
-    private Long Quantity;
+    private String productName;
+    private Long quantity;
 }
