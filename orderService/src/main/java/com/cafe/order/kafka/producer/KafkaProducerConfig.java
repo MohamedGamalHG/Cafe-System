@@ -35,16 +35,6 @@ public class KafkaProducerConfig {
         return new KafkaTemplate<>(producerFactory());
     }
 
-    @Bean
-    public NewTopic firstOrderTopic()
-    {
-        return TopicBuilder.name("order-topic-1").build();
-    }
 
-    @Bean
-    public NewTopic secondOrderTopic()
-    {
-        return TopicBuilder.name("order-topic-2").partitions(3).build();
-    }
 
 }
