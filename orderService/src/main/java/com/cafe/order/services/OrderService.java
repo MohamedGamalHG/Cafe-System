@@ -6,6 +6,7 @@ import com.cafe.order.domainMap.OrderItemMapper;
 import com.cafe.order.domainMap.OrderMapper;
 import com.cafe.order.exceptionHandling.GeneralException;
 import com.cafe.order.exceptionHandling.RecordNotFoundException;
+import com.cafe.order.kafka.producer.OrderProducer;
 import com.cafe.order.repositories.OrderRepository;
 import com.cafe.order.domain.dtos.Order;
 import com.cafe.order.domain.dtos.OrderItem;
@@ -29,6 +30,7 @@ public class OrderService {
     private final com.cafe.order.domainMap.OrderMapper OrderMapper;
     private final OrderItemMapper orderItemMapper;
     private final PriceService priceService;
+    private final OrderProducer orderProducer;
 
     public List<Order> findAll()
     {
@@ -60,7 +62,9 @@ public class OrderService {
         repository.save(order);
 
         List<JpaOrderItem> jpaOrderItems = createOrderItemList(orderRequest,order);
-        orderItemRepository.saveAll(jpaOrderItems);
+        var t = orderItemRepository.saveAll(jpaOrderItems);
+
+        orderProducer.sendOrderMessage("Saved Done");
 
         return orderRequest;
     }

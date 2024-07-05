@@ -1,6 +1,7 @@
 package com.cafe.order.kafka.producer;
 
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
@@ -9,7 +10,10 @@ import org.springframework.stereotype.Component;
 public class OrderProducerImp implements OrderProducer{
     private KafkaTemplate<String, String> kafkaTemplate;
 
-    public void sendOrderMessage(String topicName, String message) {
-        kafkaTemplate.send(topicName, message);
+    @Value("${spring.kafka.topic-name-1}")
+    private String topicName;
+
+    public void sendOrderMessage(String message) {
+        kafkaTemplate.send(this.topicName,message);
     }
 }
