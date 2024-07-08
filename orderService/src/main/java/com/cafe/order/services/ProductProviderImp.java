@@ -21,7 +21,7 @@ public class ProductProviderImp implements ProductProvider {
     public List<Product> fetchProductDataByIds(List<Long> ids) {
             String queryParams = appendIdsForQueryParam(ids);
             return webClient.get()
-                    .uri(uriBuilder -> uriBuilder.path("/product/retrieveByIds").queryParam("ids", queryParams).build())
+                    .uri(uriBuilder -> uriBuilder.path("/api/product/retrieveByIds").queryParam("ids", queryParams).build())
                     .retrieve()
                     .bodyToMono(new ParameterizedTypeReference<List<Product>>() {
                     }).block();

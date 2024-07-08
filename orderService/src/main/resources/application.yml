@@ -24,8 +24,11 @@ spring:
     change-log: classpath:db/changelog-master.yml
   kafka:
     bootstrap-servers: localhost:9092
-    topic-name-1: "order-topic-1"
+    topic-name-1: "order-topic-6"
     topic-name-2: "order-topic-2"
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
 logging:
   level:

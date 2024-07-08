@@ -7,6 +7,7 @@ import com.cafe.order.domainMap.OrderMapper;
 import com.cafe.order.exceptionHandling.GeneralException;
 import com.cafe.order.exceptionHandling.RecordNotFoundException;
 import com.cafe.order.kafka.producer.OrderProducer;
+import com.cafe.order.kafka.producer.ProductProducerResponse;
 import com.cafe.order.repositories.OrderRepository;
 import com.cafe.order.domain.dtos.Order;
 import com.cafe.order.domain.dtos.OrderItem;
@@ -64,7 +65,10 @@ public class OrderService {
         List<JpaOrderItem> jpaOrderItems = createOrderItemList(orderRequest,order);
         var t = orderItemRepository.saveAll(jpaOrderItems);
 
-        orderProducer.sendOrderMessage("Saved Done");
+        ProductProducerResponse p = new ProductProducerResponse();
+        p.setProductName("there is no name");
+        p.setQuantity(3);
+        orderProducer.sendOrderMessage(p);
 
         return orderRequest;
     }

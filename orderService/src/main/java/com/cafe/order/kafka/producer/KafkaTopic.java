@@ -10,7 +10,7 @@ public class KafkaTopic {
     @Bean
     public NewTopic firstOrderTopic()
     {
-        return TopicBuilder.name("order-topic-1").build();
+        return TopicBuilder.name("order-topic-6").build();
     }
 
     @Bean
