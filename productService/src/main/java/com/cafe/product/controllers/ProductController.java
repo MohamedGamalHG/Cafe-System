@@ -12,7 +12,7 @@ import java.util.List;
 
 @Tag(name = "Product")
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/api/product")
 @AllArgsConstructor
 public class ProductController {
 

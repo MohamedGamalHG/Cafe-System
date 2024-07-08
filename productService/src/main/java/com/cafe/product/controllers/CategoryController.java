@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Category")
 @RestController
-@RequestMapping("/category")
+@RequestMapping("/api/category")
 @AllArgsConstructor
 public class CategoryController {
 
