@@ -1,4 +1,4 @@
-package com.cafe.order.kafka.producer;
+package com.cafe.kafka;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ProductProducerResponse {
+public class KafkaResponse {
     private String productName;
     private int quantity;
 }
