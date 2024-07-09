@@ -19,6 +19,7 @@
     <module>productService</module>
     <module>inventoryService</module>
     <module>orderService</module>
+      <module>kafkaResponse</module>
   </modules>
 
 

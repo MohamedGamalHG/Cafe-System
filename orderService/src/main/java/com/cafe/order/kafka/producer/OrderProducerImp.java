@@ -1,5 +1,6 @@
 package com.cafe.order.kafka.producer;
 
+import com.cafe.kafka.KafkaResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -13,8 +14,8 @@ import org.springframework.stereotype.Component;
 public class OrderProducerImp implements OrderProducer{
     @Value("${spring.kafka.topic-name-1}")
     private String topicName;
-    private KafkaTemplate<String, ProductProducerResponse> kafkaTemplate;
-    public OrderProducerImp(KafkaTemplate<String, ProductProducerResponse> kafkaTemplate){
+    private KafkaTemplate<String, KafkaResponse> kafkaTemplate;
+    public OrderProducerImp(KafkaTemplate<String, KafkaResponse> kafkaTemplate){
         this.kafkaTemplate = kafkaTemplate;
     }
 
@@ -22,9 +23,9 @@ public class OrderProducerImp implements OrderProducer{
 //        kafkaTemplate.send(this.topicName,message);
 //    }
 
-    public void sendOrderMessage(ProductProducerResponse productProducerResponse) {
+    public void sendOrderMessage(KafkaResponse productProducerResponse) {
 
-        Message<ProductProducerResponse> productProducerResponseMessage =
+        Message<KafkaResponse> productProducerResponseMessage =
                 MessageBuilder
                 .withPayload(productProducerResponse)
                 .setHeader(KafkaHeaders.TOPIC,topicName)

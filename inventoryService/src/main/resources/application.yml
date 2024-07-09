@@ -30,7 +30,7 @@ spring:
       properties:
         spring:
           json:
-            trusted-packages: com.cafe.order.kafka
+            trusted-packages: com.cafe.kafka
 
 
 

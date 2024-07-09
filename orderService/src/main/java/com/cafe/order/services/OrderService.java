@@ -1,16 +1,14 @@
 package com.cafe.order.services;
 
+import com.cafe.kafka.KafkaResponse;
 import com.cafe.order.domain.dtos.OrderRequest;
 import com.cafe.order.domain.dtos.OrderRequestList;
 import com.cafe.order.domainMap.OrderItemMapper;
-import com.cafe.order.domainMap.OrderMapper;
 import com.cafe.order.exceptionHandling.GeneralException;
 import com.cafe.order.exceptionHandling.RecordNotFoundException;
 import com.cafe.order.kafka.producer.OrderProducer;
-import com.cafe.order.kafka.producer.ProductProducerResponse;
 import com.cafe.order.repositories.OrderRepository;
 import com.cafe.order.domain.dtos.Order;
-import com.cafe.order.domain.dtos.OrderItem;
 import com.cafe.order.domain.entities.JpaOrder;
 import com.cafe.order.domain.entities.JpaOrderItem;
 import com.cafe.order.repositories.OrderItemRepository;
@@ -65,7 +63,7 @@ public class OrderService {
         List<JpaOrderItem> jpaOrderItems = createOrderItemList(orderRequest,order);
         var t = orderItemRepository.saveAll(jpaOrderItems);
 
-        ProductProducerResponse p = new ProductProducerResponse();
+        KafkaResponse p = new KafkaResponse();
         p.setProductName("there is no name");
         p.setQuantity(3);
         orderProducer.sendOrderMessage(p);
