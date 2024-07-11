@@ -64,7 +64,7 @@ public class OrderService {
         var t = orderItemRepository.saveAll(jpaOrderItems);
 
         KafkaResponse p = new KafkaResponse.Builder()
-                .setProductName("there is no name")
+                .setProductName("chees burger")
                 .setQuantity(3)
                 .build();
 
