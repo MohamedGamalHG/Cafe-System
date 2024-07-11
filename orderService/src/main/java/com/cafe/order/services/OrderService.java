@@ -3,6 +3,7 @@ package com.cafe.order.services;
 import com.cafe.kafka.KafkaResponse;
 import com.cafe.order.domain.dtos.OrderRequest;
 import com.cafe.order.domain.dtos.OrderRequestList;
+import com.cafe.order.domain.dtos.Product;
 import com.cafe.order.domainMap.OrderItemMapper;
 import com.cafe.order.exceptionHandling.GeneralException;
 import com.cafe.order.exceptionHandling.RecordNotFoundException;
@@ -30,6 +31,7 @@ public class OrderService {
     private final OrderItemMapper orderItemMapper;
     private final PriceService priceService;
     private final OrderProducer orderProducer;
+    private final ProductProvider productProvider;
 
     public List<Order> findAll()
     {
@@ -58,17 +60,12 @@ public class OrderService {
     {
 
         JpaOrder order = createOrder(orderRequest);
-        repository.save(order);
+        //repository.save(order);
 
         List<JpaOrderItem> jpaOrderItems = createOrderItemList(orderRequest,order);
-        var t = orderItemRepository.saveAll(jpaOrderItems);
+        //var t = orderItemRepository.saveAll(jpaOrderItems);
 
-        KafkaResponse p = new KafkaResponse.Builder()
-                .setProductName("chees burger")
-                .setQuantity(3)
-                .build();
-
-        orderProducer.sendOrderMessage(p);
+        sendKafkaResponse(jpaOrderItems);
 
         return orderRequest;
     }
@@ -85,6 +82,38 @@ public class OrderService {
             throw new RecordNotFoundException("This Record Is Not Found Of Id = " + id);
         }
 
+    }
+    private void sendKafkaResponse(List<JpaOrderItem> jpaOrderItems)
+    {
+
+        List<Product> products = productProvider.fetchedProduct();
+
+        List<KafkaResponse> p = new ArrayList<>();
+        for(int i=0;i<products.size();i++)
+        {
+            for (int j=0;j<jpaOrderItems.size();j++)
+            {
+                if(products.get(i).getId() == jpaOrderItems.get(j).getProductId())
+                {
+                    p.add(
+                        new KafkaResponse.Builder()
+                        .setProductName(products.get(i).getName())
+                        .setQuantity(jpaOrderItems.get(j).getQuantity())
+                        .build()
+                      );
+                }
+            }
+        }
+//        for (Product product:products) {
+//            p.add(
+//                    new KafkaResponse.Builder()
+//                    .setProductName(product.getName())
+//                    .setQuantity(3)
+//                    .build()
+//                );
+//        }
+
+        orderProducer.sendOrderMessage(p);
     }
     private boolean deleteOrderAndOrderItems(Long orderId) {
 

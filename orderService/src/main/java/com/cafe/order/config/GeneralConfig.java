@@ -1,7 +1,6 @@
 package com.cafe.order.config;
 
-import com.cafe.order.kafka.producer.OrderProducer;
-import com.cafe.order.kafka.producer.OrderProducerImp;
+
 import com.cafe.order.services.PriceService;
 import com.cafe.order.services.PriceServiceImp;
 import com.cafe.order.services.ProductProvider;

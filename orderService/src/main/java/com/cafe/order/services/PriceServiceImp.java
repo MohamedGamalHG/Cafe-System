@@ -32,7 +32,7 @@ public class PriceServiceImp implements PriceService{
     {
         List<Long> ids = getProductIds(orderRequest);
 
-        List<Product> productResponseList = productProvider.fetchProductDataByIds(ids);
+        List<Product> productResponseList = getFetchedProduct(ids);
 
         Map<Long,Double> priceMap = new HashMap<>();
         for (Product productResponse:productResponseList)
@@ -43,6 +43,12 @@ public class PriceServiceImp implements PriceService{
 
         return priceMap;
     }
+
+    private List<Product> getFetchedProduct(List<Long> ids)
+    {
+        return productProvider.fetchProductDataByIds(ids);
+    }
+
     private List<Long> getProductIds(OrderRequest orderRequest)
     {
         List<Long> ids = new ArrayList<>();

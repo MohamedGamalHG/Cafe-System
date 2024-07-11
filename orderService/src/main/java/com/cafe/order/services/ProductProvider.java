@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface ProductProvider {
     List<Product> fetchProductDataByIds(List<Long> ids);
+    List<Product> fetchedProduct();
 }

@@ -11,7 +11,7 @@ import java.util.List;
 public class ProductProviderImp implements ProductProvider {
 
     private WebClient webClient;
-
+    private List<Product> products;
     public ProductProviderImp(WebClient webClient)
     {
         this.webClient = webClient;
@@ -20,13 +20,20 @@ public class ProductProviderImp implements ProductProvider {
     @Override
     public List<Product> fetchProductDataByIds(List<Long> ids) {
             String queryParams = appendIdsForQueryParam(ids);
-            return webClient.get()
+            this.products =  webClient.get()
                     .uri(uriBuilder -> uriBuilder.path("/api/product/retrieveByIds").queryParam("ids", queryParams).build())
                     .retrieve()
                     .bodyToMono(new ParameterizedTypeReference<List<Product>>() {
                     }).block();
+
+            return this.products;
     }
 
+
+    public List<Product> fetchedProduct()
+    {
+        return this.products;
+    }
     private String appendIdsForQueryParam(List<Long> ids)
     {
         StringBuilder sb = new StringBuilder();
