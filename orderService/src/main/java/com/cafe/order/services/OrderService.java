@@ -63,9 +63,11 @@ public class OrderService {
         List<JpaOrderItem> jpaOrderItems = createOrderItemList(orderRequest,order);
         var t = orderItemRepository.saveAll(jpaOrderItems);
 
-        KafkaResponse p = new KafkaResponse();
-        p.setProductName("there is no name");
-        p.setQuantity(3);
+        KafkaResponse p = new KafkaResponse.Builder()
+                .setProductName("there is no name")
+                .setQuantity(3)
+                .build();
+
         orderProducer.sendOrderMessage(p);
 
         return orderRequest;
